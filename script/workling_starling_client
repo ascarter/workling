@@ -2,12 +2,13 @@
 require 'rubygems'
 require 'daemons'
 
-workling = "vendor/plugins/workling/script/listen.rb"
+workling = File.join(File.dirname(__FILE__), '..', 'vendor', 'plugins', 'workling', 'script', 'listen.rb')
 options = {
   :app_name   => "workling",
   :ARGV       => ARGV,
   :dir_mode   => :normal,
   :dir        => 'log',
+  :log_output => true,
   :multiple   => false,
   :backtrace  => true,
   :monitor    => true

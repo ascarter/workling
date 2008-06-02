@@ -1,7 +1,15 @@
 module Workling
   class Base
+    cattr_accessor :logger
+    @@logger = ::RAILS_DEFAULT_LOGGER
+    
     def self.inherited(subclass)
       Workling::Discovery.discovered << subclass
+    end
+    
+    def create
+      # Put worker initialize code in here.
+      # This is good for restarting jobs that were interrupted.
     end
     
     # thanks to blaine cook for this suggestion.
