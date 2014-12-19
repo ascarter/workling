@@ -40,14 +40,14 @@ then, call it like this anywhere in your code:
 Workling::Remote.run(:analytics_worker, :potential_invited, :potential_user_id => 1234)
 
 Runners
-=======
+======
 
 configure runners in your environment.rb:
 
 Workling::Remote.dispatcher = Workling::Remote::Runners::NotRemoteRunner.new (this runner just executes everything normally)
 
 SpawnRunner
-===========
+==========
 
 this uses http://rubyforge.org/projects/spawn to take the process out of the request cycle. 
 
