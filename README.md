@@ -24,7 +24,7 @@ Example
 =======
 
 First, create a worker in app/workers:
-
+```
 class AnalyticsWorker < Workling::Base
   def potential_invited(options)
     Hit.create :potential_user_id => options[:potential_user_id], :action => "invited"
@@ -34,18 +34,19 @@ class AnalyticsWorker < Workling::Base
     Hit.create :potential_user_id => options[:potential_user_id], :action => "converted"
   end
 end
+```
 
 then, call it like this anywhere in your code:
-
+```
 Workling::Remote.run(:analytics_worker, :potential_invited, :potential_user_id => 1234)
+```
 
 Runners
 ======
 
 configure runners in your environment.rb:
 
-Workling::Remote.dispatcher = Workling::Remote::Runners::NotRemoteRunner.new (this runner just executes everything normally)
-
+`Workling::Remote.dispatcher = Workling::Remote::Runners::NotRemoteRunner.new` (this runner just executes everything normally)
 SpawnRunner
 ==========
 
@@ -53,14 +54,14 @@ this uses http://rubyforge.org/projects/spawn to take the process out of the req
 
 configure it like this: 
 
-SpawnRunner.options = { :method => :spawn }
+`SpawnRunner.options = { :method => :spawn }`
 
 StarlingRunner
 ==============
 
 This uses Twitter's Starling to enable your asynch code to run on different VMs. Activate it like this in your environment:
 
-Workling::Remote.dispatcher = Workling::Remote::Runners::StarlingRunner.new
+`Workling::Remote.dispatcher = Workling::Remote::Runners::StarlingRunner.new`
 
 This takes care of several things:
 
@@ -105,7 +106,7 @@ Your worklings can write back to a return store. This allows you to write progre
 Workling::Return::Store.instance = Workling::Return::Store::MemoryReturnStore.new
 
 Here is an example workling that crawls an addressbook and puts results in a return store. Worling makes sure you have options[:uid] in your hash - pass this into the return store with your results. 
-
+```
 require 'blackbook'
 class NetworkWorker < Workling::Base
   def search(options)
@@ -113,18 +114,18 @@ class NetworkWorker < Workling::Base
     Workling::Return.set(options[:uid], results)
   end
 end
-
+```
 call your workling as above: 
 
-@uid = Workling::Remote.run(:network_worker, :search, { :key => :gmail, :username => "foo@gmail.com", :password => "bar" })
+`@uid = Workling::Remote.run(:network_worker, :search, { :key => :gmail, :username => "foo@gmail.com", :password => "bar" })` 
 
 or simply: 
 
-@uid = NetworkWorker.asynch_search({ :key => :gmail, :username => "foo@gmail.com", :password => "bar" })
+`@uid = NetworkWorker.asynch_search({ :key => :gmail, :username => "foo@gmail.com", :password => "bar" })`
 
 you can now use the @uid to query the return store: 
 
-results = Workling::Return.get(@uid)
+`results = Workling::Return.get(@uid)`
 
 of course, you can use this for progress indicators. just put the progress into the return store. 
 
